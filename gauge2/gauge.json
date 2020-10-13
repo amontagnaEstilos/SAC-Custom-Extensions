@@ -1,32 +1,32 @@
 {
-	"id": "it.estilos.sac.gauge",
-	"version": "2.0.0",
-	"name": "Estilos Gauge Chart AM",
-	"description": "Estilos Gauge Chart AM",
-	"newInstancePrefix": "Gauge",
+	"id": "it.estilos.sac.gauge2",
+	"version": "1.0.0",
+	"name": "Estilos Gauge Chart AM2",
+	"description": "Estilos Gauge Chart AM2",
+	"newInstancePrefix": "Gauge2",
 	"eula": "",
 	"vendor": "Estilos",
 	"license": "",
-	"icon": "https://amontagnaEstilos.github.io/gauge/component/icon.png",
+	"icon": "https://amontagnaEstilos.github.io/gauge2/component/icon.png",
 	"webcomponents": [
 		{
 			"kind": "main",
-			"tag": "it-estilos-sac-gauge",
-			"url": "https://amontagnaEstilos.github.io/gauge/component/main.js",
+			"tag": "it-estilos-sac-gauge2",
+			"url": "https://amontagnaEstilos.github.io/gauge2/component/main.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 		},
 		{
 			"kind": "styling",
-			"tag": "it-estilos-sac-gauge-sps",
-			"url": "https://amontagnaEstilos.github.io/gauge/component/sps.js",
+			"tag": "it-estilos-sac-gauge2-sps",
+			"url": "https://amontagnaEstilos.github.io/gauge2/component/sps.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 		},
 		{
 			"kind": "builder",
-			"tag": "it-estilos-sac-gauge-bps",
-			"url": "https://amontagnaEstilos.github.io/gauge/component/bps.js",
+			"tag": "it-estilos-sac-gauge2-bps",
+			"url": "https://amontagnaEstilos.github.io/gauge2/component/bps.js",
 			"integrity": "",
 			"ignoreIntegrity": true
 		}
