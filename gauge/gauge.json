@@ -1,8 +1,8 @@
 {
 	"id": "it.estilos.sac.gauge",
 	"version": "1.0.0",
-	"name": "Estilos Gauge Chart",
-	"description": "Estilos Gauge Chart",
+	"name": "Estilos Gauge Chart AM",
+	"description": "Estilos Gauge Chart AM",
 	"newInstancePrefix": "Gauge",
 	"eula": "",
 	"vendor": "Estilos",
