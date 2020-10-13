@@ -32,30 +32,25 @@
         "value": {
             "type": "number",
             "description": "Gauge value",
-        "default":
-            0
+            "default": 0
         },
         "info": {
             "type": "string",
             "description": "Gauge info",
-        "default":
-            ""
+            "default": ""
         },
         "color": {
             "type": "string",
             "description": "Text Color info",
-        "default":
-            "#3498db"
+            "default": "#3498db"
         },
         "width": {
             "type": "integer",
-        "default":
-            100
+            "default": 100
         },
         "height": {
             "type": "integer",
-        "default":
-            100
+            "default": 100
         }
     },
     "methods": {
