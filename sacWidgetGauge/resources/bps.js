@@ -49,5 +49,5 @@
 		}
 	}
 
-	customElements.define("com-demo-box-bps", BoxBps);
+	customElements.define("ai-estilos-amontagna-demo-gauge-bps", BoxBps);
 })();

@@ -120,5 +120,5 @@
 		}
 	}
 	
-	customElements.define("com-demo-gauge", Box);
+	customElements.define("ai-estilos-amontagna-demo-gauge", Box);
 })();

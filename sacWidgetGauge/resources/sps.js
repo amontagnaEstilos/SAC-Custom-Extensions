@@ -43,5 +43,5 @@
 		}
 	}
 
-	customElements.define("com-demo-box-sps", BoxSps);
+	customElements.define("ai-estilos-amontagna-demo-gauge-sps", BoxSps);
 })();
