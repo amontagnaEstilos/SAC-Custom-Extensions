@@ -49,5 +49,5 @@
 		}
 	}
 
-	customElements.define("it-estilos-sac-gauge-bps", BoxBps);
+	customElements.define("it-estilos-sac-gauge2-bps", BoxBps);
 })();
