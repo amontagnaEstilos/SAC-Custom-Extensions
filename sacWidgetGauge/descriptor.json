@@ -1,0 +1,91 @@
+{
+    "id": "ai.estilos.amontagna.demo.gauge",
+    "version": "1.0.0",
+    "name": "amontagna Test Gauge",
+    "description": "amontagna Test Gauge",
+    "newInstancePrefix": "Gauge",
+    "icon": "https://amontagnaEstilos.github.io/sacWidgetGauge/resources/icon.png",
+    "vendor": "Estilos",
+    "eula": "",
+    "license": "",
+    "webcomponents": [{
+            "kind": "main",
+            "tag": "ai-estilos-amontagna-demo-gauge",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetGauge/resources/gauge.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }, {
+            "kind": "styling",
+            "tag": "ai-estilos-amontagna-demo-gauge-sps",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetGauge/resources/sps.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }, {
+            "kind": "builder",
+            "tag": "ai-estilos-amontagna-demo-gauge-bps",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetGauge/resources/bps.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties": {
+        "value": {
+            "type": "number",
+            "description": "Gauge value",
+        "default":
+            0
+        },
+        "info": {
+            "type": "string",
+            "description": "Gauge info",
+        "default":
+            ""
+        },
+        "color": {
+            "type": "string",
+            "description": "Text Color info",
+        "default":
+            "#3498db"
+        },
+        "width": {
+            "type": "integer",
+        "default":
+            100
+        },
+        "height": {
+            "type": "integer",
+        "default":
+            100
+        }
+    },
+    "methods": {
+        "setValue": {
+            "description": "Sets the Gauge value.",
+            "parameters": [{
+                    "name": "newValue",
+                    "type": "number",
+                    "description": "Gauge value"
+                }, {
+                    "name": "newInfo",
+                    "type": "string",
+                    "description": "Gauge info"
+                }, {
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Text Color info"
+                }
+            ],
+            "body": "this.value = newValue; this.info = newInfo; this.color = newColor;"
+        },
+        "getValue": {
+            "returnType": "number",
+            "description": "Returns the Gauge value.",
+            "body": "return this.value;"
+        }
+    },
+    "events": {
+        "onClick": {
+            "description": "Called when the user clicks the gauge."
+        }
+    }
+}
