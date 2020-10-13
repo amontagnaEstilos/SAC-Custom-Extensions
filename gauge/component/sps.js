@@ -43,4 +43,4 @@
 		}
 	}
 
-customElements.define("it-estilos-sac-widgets-gauge-sps", BoxSps);
+customElements.define("it-estilos-sac-gauge-sps", BoxSps);
