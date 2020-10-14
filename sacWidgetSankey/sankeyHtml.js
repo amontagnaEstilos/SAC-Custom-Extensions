@@ -156,7 +156,7 @@ class SANKEY extends HTMLElement {
     connectedCallback() {
         var shadow = this.shadowRoot;
         var custelem = shadow.host;
-        console.log(custelem);
+        
         if(!developMode){
             this.$width = custelem.parentNode.parentNode.parentNode.style.width;
             this.$height = custelem.parentNode.parentNode.parentNode.style.height;
@@ -294,6 +294,7 @@ class SANKEY extends HTMLElement {
                 d3.select(root.querySelector('#legendContainer')).attr('class', 'legendContainerHidden');
             }
         });
+		
         var topBar = undefined;
         if (config.showTitle || config.showSearch) {
             topBar = container.append('div').attr('class', 'topBar').append('table').append('tr');
