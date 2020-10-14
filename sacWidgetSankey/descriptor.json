@@ -37,25 +37,20 @@
             "description": "Name of measure for bubble color",
             "default": "Color"
         },
-        "selectedLabel": {
+        "selectedLinkLabel": {
             "type": "string",
-            "description": "Label of selected bubble",
+            "description": "Label of selected Link",
             "default": "undefined"
         },
-        "selectedXValue": {
-            "type": "number",
-            "description": "X-axis value of selected bubble",
-            "default": 0.0
+        "selectedLinkSource": {
+            "type": "string",
+            "description": "Source of selected Link",
+            "default": "undefined"
         },
-        "selectedSizeValue": {
-            "type": "number",
-            "description": "Size-axis value of selected bubble",
-            "default": 0.0
-        },
-        "selectedColorValue": {
-            "type": "number",
-            "description": "Color-axis value of selected bubble",
-            "default": 0.0
+        "selectedLinkTarget": {
+            "type": "string",
+            "description": "Target of selected Link",
+            "default": "undefined"
         },
         "startColor": {
             "type": "string",
@@ -132,25 +127,20 @@
             ],
             "body": "this.data = newJSONData;"
         },
-        "getSelectedLabel": {
+        "getSelectedLinkLabel": {
             "returnType": "string",
-            "description": "Returns the label of selected bubble.",
-            "body": "return this.selectedLabel;"
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkLabel;"
         },
-        "getSelectedXValue": {
-            "returnType": "number",
-            "description": "Returns the x-axis value of selected bubble.",
-            "body": "return this.selectedXValue;"
+        "getSelectedLinkSource": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkSource;"
         },
-        "getSelectedSizeValue": {
-            "returnType": "number",
-            "description": "Returns the size-axis value of selected bubble.",
-            "body": "return this.selectedSizeValue;"
-        },
-        "getSelectedColorValue": {
-            "returnType": "number",
-            "description": "Returns the color-axis value of selected bubble.",
-            "body": "return this.selectedColorValue;"
+        "getSelectedLinkTarget": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkTarget;"
         }
     },
     "events": {
