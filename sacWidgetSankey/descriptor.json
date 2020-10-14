@@ -11,7 +11,7 @@
     "webcomponents": [{
             "kind": "main",
             "tag": "ai-estilos-amontagna-demo-sankey",
-            "url": "https://amontagnaEstilos.github.io/sacWidgetSankey/resources/d3sankey.min.js",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetSankey/resources/sankey.js",
             "integrity": "",
             "ignoreIntegrity": true
         }
@@ -65,7 +65,7 @@
         "data": {
             "type": "string",
             "description": "Data in JSON format",
-            "default": "[{\"from\":\"A\",\"to\":\"E\",\"value\":1,\"id\":\"A0-0\"},{\"from\":\"A\",\"to\":\"F\",\"value\":1,\"id\":\"A1-0\"},{\"from\":\"A\",\"to\":\"G\",\"value\":1,\"id\":\"A2-0\"},{\"from\":\"B\",\"to\":\"E\",\"value\":1,\"id\":\"B0-0\"},{\"from\":\"B\",\"to\":\"F\",\"value\":1,\"id\":\"B1-0\"},{\"from\":\"B\",\"to\":\"G\",\"value\":1,\"id\":\"B2-0\"},{\"from\":\"C\",\"to\":\"F\",\"value\":1,\"id\":\"C0-0\"},{\"from\":\"C\",\"to\":\"G\",\"value\":1,\"id\":\"C1-0\"},{\"from\":\"C\",\"to\":\"H\",\"value\":1,\"id\":\"C2-0\"},{\"from\":\"D\",\"to\":\"E\",\"value\":1,\"id\":\"D0-0\"},{\"from\":\"D\",\"to\":\"F\",\"value\":1,\"id\":\"D1-0\"},{\"from\":\"D\",\"to\":\"G\",\"value\":1,\"id\":\"D2-0\"},{\"from\":\"D\",\"to\":\"H\",\"value\":1,\"id\":\"D3-0\"},{\"from\":\"E\",\"to\":\"I\",\"value\":1,\"id\":\"A0-1\"},{\"from\":\"E\",\"to\":\"I\",\"value\":1,\"id\":\"B0-1\"},{\"from\":\"E\",\"to\":\"L\",\"value\":1,\"id\":\"D0-1\"},{\"from\":\"F\",\"to\":\"I\",\"value\":1,\"id\":\"A1-1\"},{\"from\":\"F\",\"to\":\"I\",\"value\":1,\"id\":\"C0-1\"},{\"from\":\"F\",\"to\":\"I\",\"value\":1,\"id\":\"D1-1\"},{\"from\":\"F\",\"to\":\"M\",\"value\":1,\"id\":\"B1-1\"},{\"from\":\"G\",\"to\":\"I\",\"value\":1,\"id\":\"A2-1\"},{\"from\":\"G\",\"to\":\"I\",\"value\":1,\"id\":\"B2-1\"},{\"from\":\"G\",\"to\":\"J\",\"value\":1,\"id\":\"C1-1\"},{\"from\":\"G\",\"to\":\"N\",\"value\":1,\"id\":\"D2-1\"},{\"from\":\"H\",\"to\":\"K\",\"value\":1,\"id\":\"C2-1\"},{\"from\":\"H\",\"to\":\"N\",\"value\":1,\"id\":\"D3-1\"},{\"from\":\"I\",\"to\":\"O\",\"value\":1,\"id\":\"A0-2\"},{\"from\":\"I\",\"to\":\"O\",\"value\":1,\"id\":\"B2-2\"},{\"from\":\"I\",\"to\":\"Q\",\"value\":1,\"id\":\"A1-2\"},{\"from\":\"I\",\"to\":\"R\",\"value\":1,\"id\":\"A2-2\"},{\"from\":\"I\",\"to\":\"S\",\"value\":1,\"id\":\"D1-2\"},{\"from\":\"I\",\"to\":\"T\",\"value\":1,\"id\":\"B0-2\"},{\"from\":\"I\",\"to\":\"Q\",\"value\":1,\"id\":\"C0-2\"},{\"from\":\"J\",\"to\":\"U\",\"value\":1,\"id\":\"C1-2\"},{\"from\":\"K\",\"to\":\"V\",\"value\":1,\"id\":\"C2-2\"},{\"from\":\"M\",\"to\":\"U\",\"value\":1,\"id\":\"B1-2\"},{\"from\":\"N\",\"to\":\"Q\",\"value\":1,\"id\":\"D2-2\"},{\"from\":\"N\",\"to\":\"Q\",\"value\":1,\"id\":\"D3-2\"},{\"from\":\"L\",\"to\":\"W\",\"value\":1,\"id\":\"D0-2\"}]"
+            "default": "{\"nodes\":[{\"node\":0,\"name\":\"node0\"},{\"node\":1,\"name\":\"node1\"},{\"node\":2,\"name\":\"node2\"},{\"node\":3,\"name\":\"node3\"},{\"node\":4,\"name\":\"node4\"}],\"links\":[{\"source\":0,\"target\":2,\"value\":2},{\"source\":1,\"target\":2,\"value\":2},{\"source\":1,\"target\":3,\"value\":2},{\"source\":0,\"target\":4,\"value\":2},{\"source\":2,\"target\":3,\"value\":2},{\"source\":2,\"target\":4,\"value\":2},{\"source\":3,\"target\":4,\"value\":4}]}"
         },
         "width": {
             "type": "integer",

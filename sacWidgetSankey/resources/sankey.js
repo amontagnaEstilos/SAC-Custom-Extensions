@@ -1,6 +1,6 @@
 //d3-sankey SAC custom widget Version 1.0.0. 
 (function () {
-    let developMode = false; //AM developer flag
+    let developMode = true; //AM developer flag
     let template = document.createElement("template");
     template.innerHTML = `<div>
 	<svg width=100%height=100%id=d3sankey/>
