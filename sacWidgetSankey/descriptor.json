@@ -1,0 +1,161 @@
+{
+    "id": "ai.estilos.amontagna.demo.sankey",
+    "version": "1.0.0",
+    "name": "Sankey",
+    "description": "Sankey Chart",
+    "newInstancePrefix": "SANKEY",
+    "icon": "",
+    "vendor": "Estilos",
+    "eula": "",
+    "license": "",
+    "webcomponents": [{
+            "kind": "main",
+            "tag": "ai-estilos-amontagna-demo-sankey",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetSankey/resources/d3sankey.min.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Chart title",
+            "default": "Custom Sankey Widget"
+        },
+        "showTitle": {
+            "type": "boolean",
+            "description": "Show title of the chart",
+            "default": true
+        },
+        "sizeLabel": {
+            "type": "string",
+            "description": "Name of measure for bubble size",
+            "default": "Size"
+        },
+        "colorLabel": {
+            "type": "string",
+            "description": "Name of measure for bubble color",
+            "default": "Color"
+        },
+        "selectedLabel": {
+            "type": "string",
+            "description": "Label of selected bubble",
+            "default": "undefined"
+        },
+        "selectedXValue": {
+            "type": "number",
+            "description": "X-axis value of selected bubble",
+            "default": 0.0
+        },
+        "selectedSizeValue": {
+            "type": "number",
+            "description": "Size-axis value of selected bubble",
+            "default": 0.0
+        },
+        "selectedColorValue": {
+            "type": "number",
+            "description": "Color-axis value of selected bubble",
+            "default": 0.0
+        },
+        "startColor": {
+            "type": "string",
+            "description": "Color of the bubble with lowest color value",
+            "default": "#ffcd00"
+        },
+        "endColor": {
+            "type": "string",
+            "description": "Color of the bubble with highest color value",
+            "default": "#b01c02"
+        },
+        "data": {
+            "type": "string",
+            "description": "Data in JSON format",
+            "default": "[{\"from\":\"A\",\"to\":\"E\",\"value\":1,\"id\":\"A0-0\"},{\"from\":\"A\",\"to\":\"F\",\"value\":1,\"id\":\"A1-0\"},{\"from\":\"A\",\"to\":\"G\",\"value\":1,\"id\":\"A2-0\"},{\"from\":\"B\",\"to\":\"E\",\"value\":1,\"id\":\"B0-0\"},{\"from\":\"B\",\"to\":\"F\",\"value\":1,\"id\":\"B1-0\"},{\"from\":\"B\",\"to\":\"G\",\"value\":1,\"id\":\"B2-0\"},{\"from\":\"C\",\"to\":\"F\",\"value\":1,\"id\":\"C0-0\"},{\"from\":\"C\",\"to\":\"G\",\"value\":1,\"id\":\"C1-0\"},{\"from\":\"C\",\"to\":\"H\",\"value\":1,\"id\":\"C2-0\"},{\"from\":\"D\",\"to\":\"E\",\"value\":1,\"id\":\"D0-0\"},{\"from\":\"D\",\"to\":\"F\",\"value\":1,\"id\":\"D1-0\"},{\"from\":\"D\",\"to\":\"G\",\"value\":1,\"id\":\"D2-0\"},{\"from\":\"D\",\"to\":\"H\",\"value\":1,\"id\":\"D3-0\"},{\"from\":\"E\",\"to\":\"I\",\"value\":1,\"id\":\"A0-1\"},{\"from\":\"E\",\"to\":\"I\",\"value\":1,\"id\":\"B0-1\"},{\"from\":\"E\",\"to\":\"L\",\"value\":1,\"id\":\"D0-1\"},{\"from\":\"F\",\"to\":\"I\",\"value\":1,\"id\":\"A1-1\"},{\"from\":\"F\",\"to\":\"I\",\"value\":1,\"id\":\"C0-1\"},{\"from\":\"F\",\"to\":\"I\",\"value\":1,\"id\":\"D1-1\"},{\"from\":\"F\",\"to\":\"M\",\"value\":1,\"id\":\"B1-1\"},{\"from\":\"G\",\"to\":\"I\",\"value\":1,\"id\":\"A2-1\"},{\"from\":\"G\",\"to\":\"I\",\"value\":1,\"id\":\"B2-1\"},{\"from\":\"G\",\"to\":\"J\",\"value\":1,\"id\":\"C1-1\"},{\"from\":\"G\",\"to\":\"N\",\"value\":1,\"id\":\"D2-1\"},{\"from\":\"H\",\"to\":\"K\",\"value\":1,\"id\":\"C2-1\"},{\"from\":\"H\",\"to\":\"N\",\"value\":1,\"id\":\"D3-1\"},{\"from\":\"I\",\"to\":\"O\",\"value\":1,\"id\":\"A0-2\"},{\"from\":\"I\",\"to\":\"O\",\"value\":1,\"id\":\"B2-2\"},{\"from\":\"I\",\"to\":\"Q\",\"value\":1,\"id\":\"A1-2\"},{\"from\":\"I\",\"to\":\"R\",\"value\":1,\"id\":\"A2-2\"},{\"from\":\"I\",\"to\":\"S\",\"value\":1,\"id\":\"D1-2\"},{\"from\":\"I\",\"to\":\"T\",\"value\":1,\"id\":\"B0-2\"},{\"from\":\"I\",\"to\":\"Q\",\"value\":1,\"id\":\"C0-2\"},{\"from\":\"J\",\"to\":\"U\",\"value\":1,\"id\":\"C1-2\"},{\"from\":\"K\",\"to\":\"V\",\"value\":1,\"id\":\"C2-2\"},{\"from\":\"M\",\"to\":\"U\",\"value\":1,\"id\":\"B1-2\"},{\"from\":\"N\",\"to\":\"Q\",\"value\":1,\"id\":\"D2-2\"},{\"from\":\"N\",\"to\":\"Q\",\"value\":1,\"id\":\"D3-2\"},{\"from\":\"L\",\"to\":\"W\",\"value\":1,\"id\":\"D0-2\"}]"
+        },
+        "width": {
+            "type": "integer",
+            "default": 800
+        },
+        "height": {
+            "type": "integer",
+            "default": 800
+        }
+    },
+    "methods": {
+        "setStartColor": {
+            "description": "Sets the color of the bubble with lowest value.",
+            "parameters": [{
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Color of the bubble with lowest value"
+                }
+            ],
+            "body": "this.startColor = newColor;"
+        },
+        "setEndColor": {
+            "description": "Sets the color of the bubble with highest value.",
+            "parameters": [{
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Color of the bubble with highest value"
+                }
+            ],
+            "body": "this.endColor = newColor;"
+        },
+        "setTitleVisible": {
+            "description": "Show title of the chart.",
+            "parameters": [{
+                    "name": "flag",
+                    "type": "boolean",
+                    "description": "Show title of the chart"
+                }
+            ],
+            "body": "this.showTitle = flag;"
+        },
+        "setTitle": {
+            "description": "Sets the title of the chart.",
+            "parameters": [{
+                    "name": "newValue",
+                    "type": "string",
+                    "description": "The new title of chart"
+                }
+            ],
+            "body": "this.title = newValue;"
+        },
+        "setData": {
+            "description": "Sets the data of the chart.",
+            "parameters": [{
+                    "name": "newJSONData",
+                    "type": "string",
+                    "description": "The new data of chart"
+                }
+            ],
+            "body": "this.data = newJSONData;"
+        },
+        "getSelectedLabel": {
+            "returnType": "string",
+            "description": "Returns the label of selected bubble.",
+            "body": "return this.selectedLabel;"
+        },
+        "getSelectedXValue": {
+            "returnType": "number",
+            "description": "Returns the x-axis value of selected bubble.",
+            "body": "return this.selectedXValue;"
+        },
+        "getSelectedSizeValue": {
+            "returnType": "number",
+            "description": "Returns the size-axis value of selected bubble.",
+            "body": "return this.selectedSizeValue;"
+        },
+        "getSelectedColorValue": {
+            "returnType": "number",
+            "description": "Returns the color-axis value of selected bubble.",
+            "body": "return this.selectedColorValue;"
+        }
+    },
+    "events": {
+        "onSelect": {
+            "description": "Called when the user selects/de-selects a bubble."
+        }
+    }
+}
