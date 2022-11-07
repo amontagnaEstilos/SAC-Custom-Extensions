@@ -147,5 +147,21 @@
         "onSelect": {
             "description": "Called when the user selects/de-selects a bubble."
         }
-    }
+    },
+    "dataBindings": {
+      "myDataBinding": {
+        "feeds": [
+          {
+            "id": "dimensions",
+            "description": "Dimensions",
+            "type": "dimension"
+          },
+          {
+            "id": "measures",
+            "description": "Measures",
+            "type": "mainStructureMember"
+          }
+        ]
+      }
+    }    
 }
