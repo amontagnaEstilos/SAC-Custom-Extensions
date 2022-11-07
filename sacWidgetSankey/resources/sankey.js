@@ -1,45 +1,52 @@
 //d3-sankey SAC custom widget Version 1.0.0. 
 (function () {
     let developMode = true; //AM developer flag
-    let template = document.createElement("template");
-    template.innerHTML = `<div>
-	<svg width=100%height=100%id=d3sankey/>
-</div>
-<style>
-.linkDefault {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .2;
-}
-.linkUnselected {
-  stroke-opacity: .5;
-}
-.linkDefaultHover {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .2;
-}
-.linkUnselectedHover {
-  stroke-opacity: .5;
-}
-</style>`;
+    const prepared = document.createElement("template");
+    prepared.innerHTML = `
+        <style>
+        .linkDefault {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: .2;
+        }
+        .linkUnselected {
+        stroke-opacity: .5;
+        }
+        .linkDefaultHover {
+        fill: none;
+        stroke: #000;
+        stroke-opacity: .2;
+        }
+        .linkUnselectedHover {
+        stroke-opacity: .5;
+        }
+        </style>
+        <div>
+	    <div id="root" style="width: 100%; height: 100%;">
+        </div>
+    `;
 
 class SANKEY extends HTMLElement {
     constructor() {
         super();
-        let shadowRoot = this.attachShadow({
-                mode: "open"
-            });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+
+        //let shadowRoot = this.attachShadow({mode: "open" });
+        //shadowRoot.appendChild(prepared.content.cloneNode(true));
+        this._shadowRoot = this.attachShadow({ mode: "open" });
+        this._shadowRoot.appendChild(prepared.content.cloneNode(true));
+
+        this._root = this._shadowRoot.getElementById("root");
+
         this._props = this.d3SankeyDefaultSettings();
-        this._init = true;
-        this._firstUpdate = true;
-        this._firstResize = true;
-        this._selectionEvent = false;
+        //this._init = true;
+        //this._firstUpdate = true;
+        //this._firstResize = true;
+        //this._selectionEvent = false;
+
+        this.render();
     }
     onCustomWidgetBeforeUpdate(changedProperties) {}
     onCustomWidgetAfterUpdate(changedProperties) {
-        var shadow = this.shadowRoot;
         if ("startColor" in changedProperties) {
             this._props.startColor = changedProperties["startColor"];
             this._selectionEvent = false;
@@ -112,27 +119,34 @@ class SANKEY extends HTMLElement {
             this.$data = changedProperties["data"];
             this._selectionEvent = false;
         }
-        let LoadLibsAfterUpdate = async function (host, data, props) {
-            try {
-                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-            } catch (e) {
-                console.log(JSON.stringify(e));
-            }
-            finally {
-                host.drawChart(data, props);
-            }
-        };
-        if (!(this._init || this._selectionEvent)) {
-            if (this._firstUpdate) {
-                LoadLibsAfterUpdate(this, this.$data, this._props);
-                this._firstUpdate = false;
-            } else {
-                this.drawChart(this.$data, this._props);
-            }
-        }
+
+        this.render();
     }
-	onCustomWidgetResize(width, height) {
+
+    onCustomWidgetResize(width, height) {
+        this.render();
+    }  
+
+    set myDataSource(dataBinding) {
+        this._myDataSource = dataBinding;
+        this.render();
+      }
+
+    async render(){
+        if (!this._myDataSource || this._myDataSource.state !== "success") {
+            return;
+          }
+    
+        const dimension = this._myDataSource.metadata.feeds.dimensions.values[0];
+        const measure = this._myDataSource.metadata.feeds.measures.values[0];
+        const data = this._myDataSource.data.map((data) => {
+            return {
+                name: data[dimension].label,
+                value: data[measure].raw,
+            };
+        });
+    
+
         var shadow = this.shadowRoot;
         this.$width = width + 'px';
         this.$height = height + 'px';
@@ -154,6 +168,7 @@ class SANKEY extends HTMLElement {
             this.drawChart(this.$data, this._props);
         }
     }
+	
 	connectedCallback() {
 		var shadow = this.shadowRoot;
 		var custelem = shadow.host;

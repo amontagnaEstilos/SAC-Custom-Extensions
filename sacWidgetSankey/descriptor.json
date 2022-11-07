@@ -1,6 +1,6 @@
 {
     "id": "ai.estilos.amontagna.demo.sankey",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "name": "Sankey",
     "description": "Sankey Chart",
     "newInstancePrefix": "SANKEY",
@@ -75,7 +75,23 @@
             "type": "integer",
             "default": 800
         }
-    },
+    },    
+    "dataBindings": {
+        "myDataSource": {
+          "feeds": [
+            {
+              "id": "dimensions",
+              "description": "Dimensions",
+              "type": "dimension"
+            },
+            {
+              "id": "measures",
+              "description": "Measures",
+              "type": "mainStructureMember"
+            }
+          ]
+        }
+      },
     "methods": {
         "setStartColor": {
             "description": "Sets the color of the bubble with lowest value.",
@@ -147,21 +163,5 @@
         "onSelect": {
             "description": "Called when the user selects/de-selects a bubble."
         }
-    },
-    "dataBindings": {
-      "myDataBinding": {
-        "feeds": [
-          {
-            "id": "dimensions",
-            "description": "Dimensions",
-            "type": "dimension"
-          },
-          {
-            "id": "measures",
-            "description": "Measures",
-            "type": "mainStructureMember"
-          }
-        ]
-      }
-    }    
+    }
 }
