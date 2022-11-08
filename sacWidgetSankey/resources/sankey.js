@@ -6,7 +6,7 @@ var getScriptPromisify = (src) => {
 
 //d3-sankey SAC custom widget Version 1.0.0. 
 (function () {
-let developMode = false; //AM developer flag
+let developMode = true; //AM developer flag
 const prepared = document.createElement("template");
 prepared.innerHTML = `
     <style>
