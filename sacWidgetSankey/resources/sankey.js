@@ -91,7 +91,7 @@ class SANKEY extends HTMLElement {
             });
         
         
-        this.drawChart(this.$data, this._props);
+        this.drawChart(data, this._props);
     }
 
     drawChart(value, config) {
