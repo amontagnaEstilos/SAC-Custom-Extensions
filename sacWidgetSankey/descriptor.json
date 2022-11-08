@@ -62,10 +62,15 @@
             "description": "Color of the bubble with highest color value",
             "default": "#b01c02"
         },
-        "data": {
+        "data_test1_sankey": {
             "type": "string",
             "description": "Data in JSON format",
             "default": "{\"nodes\":[{\"node\":0,\"name\":\"node0\"},{\"node\":1,\"name\":\"node1\"},{\"node\":2,\"name\":\"node2\"},{\"node\":3,\"name\":\"node3\"},{\"node\":4,\"name\":\"node4\"}],\"links\":[{\"source\":0,\"target\":2,\"value\":2},{\"source\":1,\"target\":2,\"value\":2},{\"source\":1,\"target\":3,\"value\":2},{\"source\":0,\"target\":4,\"value\":2},{\"source\":2,\"target\":3,\"value\":2},{\"source\":2,\"target\":4,\"value\":2},{\"source\":3,\"target\":4,\"value\":4}]}"
+        },
+        "data": {
+            "type": "string",
+            "description": "Data in JSON format",
+            "default": "{\"data\":[{\"dimensions_0\":{\"id\":\"[Product_3e315003an].[Product_Catego_3o3x5e06y2].&[PC4]\",\"label\":\"Alcohol\"},\"dimensions_1\":{\"id\":\"[Location_4nm2e04531].[State_47acc246_4m5x6u3k6s].&[SA1]\",\"label\":\"California\"},\"measures_0\":{\"raw\":30720120.73,\"formatted\":\"30.72Million\",\"unit\":\"USD\"}}],\"metadata\":{\"feeds\":{\"measures\":{\"values\":[\"measures_0\"],\"type\":\"mainStructureMember\"},\"dimensions\":{\"values\":[\"dimensions_0\",\"dimensions_1\"],\"type\":\"dimension\"}},\"dimensions\":{\"dimensions_0\":{\"id\":\"Product_3e315003an\",\"description\":\"Product\"},\"dimensions_1\":{\"id\":\"Location_4nm2e04531\",\"description\":\"Location\"}},\"mainStructureMembers\":{\"measures_0\":{\"id\":\"[Account_BestRunJ_sold].[parentId].&[Discount]\",\"label\":\"Discount\"}}}}"
         },
         "width": {
             "type": "integer",

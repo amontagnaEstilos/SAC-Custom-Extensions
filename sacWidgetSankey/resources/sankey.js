@@ -136,15 +136,23 @@ class SANKEY extends HTMLElement {
         if (!this._myDataSource || this._myDataSource.state !== "success") {
             return;
           }
-    
-        const dimension = this._myDataSource.metadata.feeds.dimensions.values[0];
+    console.log(this._myDataSource);
+        const source = this._myDataSource.metadata.feeds.dimensions.values[0];
+        const target = this._myDataSource.metadata.feeds.dimensions.values[1];
         const measure = this._myDataSource.metadata.feeds.measures.values[0];
+
         const data = this._myDataSource.data.map((data) => {
             return {
-                name: data[dimension].label,
-                value: data[measure].raw,
+                nodes:{
+                    source: data[source].label
+                },
+                links:{
+                    source: data[source].label,
+                    target: data[target].label,
+                    value: data[measure].raw,
+                }
             };
-        });
+          });
     
 
         var shadow = this.shadowRoot;
@@ -158,42 +166,19 @@ class SANKEY extends HTMLElement {
                 console.log(JSON.stringify(e));
             }
             finally {
-                host.drawChart(data, props);
+                host.drawChart(data, props, data);
             }
         };
         if (this._firstResize) {
             LoadLibsAfterResize(this, this.$data, this._props);
             this._firstResize = false;
         } else {
-            this.drawChart(this.$data, this._props);
+            this.drawChart(this.$data, this._props, data);
         }
     }
 	
 	connectedCallback() {
-		var shadow = this.shadowRoot;
-		var custelem = shadow.host;
-        if(!developMode){
-            this.$width = custelem.parentNode.parentNode.parentNode.style.width;
-            this.$height = custelem.parentNode.parentNode.parentNode.style.height;
-        }
-        else{
-            this.$width = "800px";
-            this.$height = "800px";
-            this.$data = '{"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]}';
-        }
-        let LoadLibs = async function (host, data, props) {
-			try {
-				await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-				await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-			} catch (e) {
-				console.log(JSON.stringify(e));
-			}
-			finally {
-				host.drawChart(data, props);
-			}
-		};
-		LoadLibs(this, this.$data, this._props);
-		this._init = false;
+        this.render();
 	}
 	disconnectedCallback() {}
 	updateSelectedLinkLabel(label) {
@@ -202,8 +187,10 @@ class SANKEY extends HTMLElement {
 		else
 			this._props.selectedLinkLabel = label;
 	}
-	drawChart(value, config) {
+
+	drawChart(value, config, data) {
 		config.valDecimal = config.valDecimal + "";
+
 		var r = this.shadowRoot;
 		var _div = r.querySelector('div');
 		_div.style.width = this.$width - 10;
@@ -229,8 +216,10 @@ class SANKEY extends HTMLElement {
 		var legend = legendRoot.appendChild(document.createElement("div"));
 		legendRoot.setAttribute("id", "legendContainer");
 		legendRoot.setAttribute("class", "legendContainerHidden");
-		var fbchart = this.drawSankey(value, config, this.shadowRoot, this);
+
+		var fbchart = this.drawSankey(value, config, data, this.shadowRoot, this);
 	}
+
 	loadScript(src, shadowRoot) {
 		return new Promise(function (resolve, reject) {
 			let script = document.createElement('script');
@@ -271,7 +260,7 @@ class SANKEY extends HTMLElement {
             defaultChartBodyWidth: 400
         };
 	}
-	drawSankey(dataJSON, config, root, eventDispatcher) {
+	drawSankey(dataJSON, config, data, root, eventDispatcher) {
 		var container = d3.select(root.querySelector('#chartContainer'));
 		if (config == null)
 			config = d3SankeyDefaultSettings();
@@ -333,6 +322,7 @@ class SANKEY extends HTMLElement {
 			d3.select(vis_t).append('text').text(config.title).attr('x', 0).attr('y', 0).attr("dy", "12px").attr("class", 'title');
         }
 
+        //Container Format and Style
         var vis = container.append('div')
                             .attr('class', 'chartBody')
                             .style('height', (config.showTitle || config.showSearch) ? Math.max((container.style('height')
@@ -350,10 +340,15 @@ class SANKEY extends HTMLElement {
 		var colorScale = [];
 		colorScale.push(config.startColor);
 		colorScale.push(config.endColor);
+        // END - Container Format and Style
 
-		var nodes = config.data.nodes;
-        var links = config.data.links;
-		
+		//var nodes = config.data.nodes;
+        //var links = config.data.links;
+		var nodes = data.nodes;
+		var links = data.links;
+
+
+
         if(!developMode){
 			var min_x = _.minBy(nodes, function (d) {
 					return d.xvalue;

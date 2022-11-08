@@ -1,27 +1,28 @@
 let developMode = true; //AM developer flag
-
-let template = document.createElement("template");
-    template.innerHTML = `<div>
-	<svg width=100%height=100%id=d3sankey/>
-</div>
-<style>
-.linkDefault {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .2;
-}
-.linkUnselected {
-  stroke-opacity: .5;
-}
-.linkDefaultHover {
-  fill: none;
-  stroke: #000;
-  stroke-opacity: .2;
-}
-.linkUnselectedHover {
-  stroke-opacity: .5;
-}
-</style>`;
+const prepared = document.createElement("template");
+prepared.innerHTML = `
+    <style>
+    .linkDefault {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+    }
+    .linkUnselected {
+    stroke-opacity: .5;
+    }
+    .linkDefaultHover {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+    }
+    .linkUnselectedHover {
+    stroke-opacity: .5;
+    }
+    </style>
+    <div>
+    <div id="root" style="width: 100%; height: 100%;">
+    </div>
+`;
 
 class SANKEY extends HTMLElement {
     constructor() {
@@ -29,16 +30,39 @@ class SANKEY extends HTMLElement {
         let shadowRoot = this.attachShadow({
                 mode: "open"
             });
-        shadowRoot.appendChild(template.content.cloneNode(true));
+        shadowRoot.appendChild(prepared.content.cloneNode(true));
         this._props = this.d3SankeyDefaultSettings();
         this._init = true;
         this._firstUpdate = true;
         this._firstResize = true;
         this._selectionEvent = false;
     }
+
+    async render(){ 
+        var shadow = this.shadowRoot;
+        let LoadLibs = async function (host, data, props) {
+            try {
+                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
+                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
+            } catch (e) {
+                console.log(JSON.stringify(e));
+            }
+            finally {
+                host.drawChart(data, props);
+            }
+        };
+        if (!(this._init || this._selectionEvent)) {
+            if (this._firstUpdate) {
+                LoadLibs(this, this.$data, this._props);
+                this._firstUpdate = false;
+            } else {
+                this.drawChart(this.$data, this._props);
+            }
+        }
+    }
+
     onCustomWidgetBeforeUpdate(changedProperties) {}
     onCustomWidgetAfterUpdate(changedProperties) {
-        var shadow = this.shadowRoot;
         if ("startColor" in changedProperties) {
             this._props.startColor = changedProperties["startColor"];
             this._selectionEvent = false;
@@ -111,47 +135,10 @@ class SANKEY extends HTMLElement {
             this.$data = changedProperties["data"];
             this._selectionEvent = false;
         }
-        let LoadLibsAfterUpdate = async function (host, data, props) {
-            try {
-                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-            } catch (e) {
-                console.log(JSON.stringify(e));
-            }
-            finally {
-                host.drawChart(data, props);
-            }
-        };
-        if (!(this._init || this._selectionEvent)) {
-            if (this._firstUpdate) {
-                LoadLibsAfterUpdate(this, this.$data, this._props);
-                this._firstUpdate = false;
-            } else {
-                this.drawChart(this.$data, this._props);
-            }
-        }
+        this.render();
     }
     onCustomWidgetResize(width, height) {
-        var shadow = this.shadowRoot;
-        this.$width = width + 'px';
-        this.$height = height + 'px';
-        let LoadLibsAfterResize = async function (host, data, props) {
-            try {
-                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-            } catch (e) {
-                console.log(JSON.stringify(e));
-            }
-            finally {
-                host.drawChart(data, props);
-            }
-        };
-        if (this._firstResize) {
-            LoadLibsAfterResize(this, this.$data, this._props);
-            this._firstResize = false;
-        } else {
-            this.drawChart(this.$data, this._props);
-        }
+        this.render();
     }
     connectedCallback() {
         var shadow = this.shadowRoot;
@@ -164,7 +151,28 @@ class SANKEY extends HTMLElement {
         else{
             this.$width = "800px";
             this.$height = "800px";
-            this.$data = '{"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]}';
+            var test = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]};
+            
+            var input = {"data":[{"dimensions_0":{"id":"[Product_3e315003an].[Product_Catego_3o3x5e06y2].&[PC4]","label":"Alcohol"},"dimensions_1":{"id":"[Location_4nm2e04531].[State_47acc246_4m5x6u3k6s].&[SA1]","label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
+            const source = input.metadata.feeds.dimensions.values[0];
+            const target = input.metadata.feeds.dimensions.values[1];
+            const measure = input.metadata.feeds.measures.values[0];
+
+            this.$data = input.data.map((data) => {
+                return {
+                    nodes:[{
+                        node: data[source].id,
+                        name: data[source].label
+                    }],
+                    links:[{
+                        source: data[source].label,
+                        target: data[target].label,
+                        value: data[measure].raw,
+                    }]
+                };
+              });
+              console.log(this.$data);
+              console.log(test);
         }
         let LoadLibs = async function (host, data, props) {
             try {
