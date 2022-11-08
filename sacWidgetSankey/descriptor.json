@@ -1,6 +1,6 @@
 {
     "id": "ai.estilos.amontagna.demo.sankey",
-    "version": "2.0.4",
+    "version": "2.0.6",
     "name": "Sankey",
     "description": "Sankey Chart",
     "newInstancePrefix": "SANKEY",
@@ -11,7 +11,7 @@
     "webcomponents": [{
             "kind": "main",
             "tag": "ai-estilos-amontagna-demo-sankey",
-            "url": "https://amontagnaEstilos.github.io/sacWidgetSankey/resources/sankey.js",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetSankey/resources/sankey_copy.js",
             "integrity": "",
             "ignoreIntegrity": true
         }
