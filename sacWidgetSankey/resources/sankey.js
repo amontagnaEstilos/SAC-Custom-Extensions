@@ -68,7 +68,7 @@ class SANKEY extends HTMLElement {
         const target = this._myDataSource.metadata.feeds.dimensions.values[1];
         const measure = this._myDataSource.metadata.feeds.measures.values[0];
 
-        const data = { nodes:[], links:[]};
+        var data = { nodes:[], links:[]};
         var nodes_source = this._myDataSource.data.map((data) => {
             return {
                     node: data[source].id,
