@@ -42,7 +42,8 @@ class SANKEY extends HTMLElement {
         var shadow = this.shadowRoot;
         let LoadLibs = async function (host, data, props) {
             try {
-                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
+                //await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
+                await host.loadScript("https://d3js.org/d3.v5.js", shadow);
                 await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
             } catch (e) {
                 console.log(JSON.stringify(e));
@@ -140,54 +141,88 @@ class SANKEY extends HTMLElement {
     onCustomWidgetResize(width, height) {
         this.render();
     }
-    connectedCallback() {
+
+    //This method is the developer method equal to set myDataSource
+    connectedCallback() { 
+        this.$width = "800px";
+        this.$height = "800px";
+        //this.$data = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]};
+        //this.$data = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"}],"links":[{"source":0,"target":1,"value":2}]};
+        var input = {"data":[{"dimensions_0":{"id":"Alcohol","label":"Alcohol"},"dimensions_1":{"id":"California","label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
+        //var input = {"data":[{"dimensions_0":{"id":1,"label":"Alcohol"},"dimensions_1":{"id":2,"label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}},{"dimensions_0":{"id":3,"label":"Alcohol_am"},"dimensions_1":{"id":2,"label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
+     
+        const source = input.metadata.feeds.dimensions.values[0];
+        const target = input.metadata.feeds.dimensions.values[1];
+        const measure = input.metadata.feeds.measures.values[0];
+
+        this.$data = { nodes:[], links:[]};
+        var nodes_source = input.data.map((data) => {
+            return {
+                    node: data[source].id,
+                    name: data[source].id
+                };
+          });
+        var nodes_target = input.data.map((data) => {
+            return {
+                    node: data[target].id,
+                    name: data[target].id
+                };
+          });
+        this.$data.nodes = nodes_source.concat(nodes_target);
+        this.$data.links = input.data.map((data) => {
+            return {
+                    source: data[source].id,
+                    target: data[target].id,
+                    value: data[measure].raw,
+            };
+          });
+          
+        this._init = false;
+        this.render();
+    }
+
+    set myDataSource(dataBinding) {
         var shadow = this.shadowRoot;
         var custelem = shadow.host;
+        this.$width = custelem.parentNode.parentNode.parentNode.style.width;
+        this.$height = custelem.parentNode.parentNode.parentNode.style.height;
         
-        if(!developMode){
-            this.$width = custelem.parentNode.parentNode.parentNode.style.width;
-            this.$height = custelem.parentNode.parentNode.parentNode.style.height;
+        this._myDataSource = dataBinding;
+        if (!this._myDataSource || this._myDataSource.state !== "success") {
+            return;
         }
-        else{
-            this.$width = "800px";
-            this.$height = "800px";
-            var test = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]};
-            
-            var input = {"data":[{"dimensions_0":{"id":"[Product_3e315003an].[Product_Catego_3o3x5e06y2].&[PC4]","label":"Alcohol"},"dimensions_1":{"id":"[Location_4nm2e04531].[State_47acc246_4m5x6u3k6s].&[SA1]","label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
-            const source = input.metadata.feeds.dimensions.values[0];
-            const target = input.metadata.feeds.dimensions.values[1];
-            const measure = input.metadata.feeds.measures.values[0];
+    
+        const dimension = this._myDataSource.metadata.feeds.dimensions.values[0];
+        const source = this._myDataSource.metadata.feeds.dimensions.values[0];
+        const target = this._myDataSource.metadata.feeds.dimensions.values[1];
+        const measure = this._myDataSource.metadata.feeds.measures.values[0];
 
-            this.$data = input.data.map((data) => {
-                return {
-                    nodes:[{
-                        node: data[source].id,
-                        name: data[source].label
-                    }],
-                    links:[{
-                        source: data[source].label,
-                        target: data[target].label,
-                        value: data[measure].raw,
-                    }]
+        this.$data = { nodes:[], links:[]};
+        var nodes_source = this._myDataSource.data.map((data) => {
+            return {
+                    node: data[source].id,
+                    name: data[source].id
                 };
-              });
-              console.log(this.$data);
-              console.log(test);
-        }
-        let LoadLibs = async function (host, data, props) {
-            try {
-                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-            } catch (e) {
-                console.log(JSON.stringify(e));
-            }
-            finally {
-                host.drawChart(data, props);
-            }
-        };
-        LoadLibs(this, this.$data, this._props);
+            });
+        var nodes_target = this._myDataSource.data.map((data) => {
+            return {
+                    node: data[target].id,
+                    name: data[target].id
+                };
+            });
+        this.$data.nodes = nodes_source.concat(nodes_target);
+        this.$data.links = this._myDataSource.data.map((data) => {
+            return {
+                    source: data[source].id,
+                    target: data[target].id,
+                    value: data[measure].raw,
+            };
+            });
+        
         this._init = false;
+        this.render();
     }
+
     disconnectedCallback() {}
     updateSelectedLinkLabel(label) {
         if (label == '')
@@ -264,19 +299,21 @@ class SANKEY extends HTMLElement {
             defaultChartBodyWidth: 400
         };
     }
-    drawSankey(dataJSON, config, root, eventDispatcher) {
+    drawSankey(data, config, root, eventDispatcher) {
+        console.log(data);
         var container = d3.select(root.querySelector('#chartContainer'));
         if (config == null)
             config = d3SankeyDefaultSettings();
         try {
-            config.data = JSON.parse(dataJSON);
+            //config.data = JSON.parse(dataJSON);
+            config.data = data;
         } catch (e) {
             container.append('div').attr('class', 'noData').append('p').text('No data to display.');
             d3.select(root.querySelector('#button')).style('display', 'none');
             d3.select(root.querySelector('#legendContainer')).style('display', 'none');
             return this;
         }
-        if (dataJSON == '' || dataJSON == '""' || dataJSON == "''" || dataJSON == '[]' || dataJSON == '{}' || dataJSON == null || dataJSON == undefined) {
+        if (data == '' || data == '""' || data == "''" || data == '[]' || data == '{}' || data == null || data == undefined) {
             container.append('div').attr('class', 'noData').append('p').text('No data to display.');
             d3.select(root.querySelector('#button')).style('display', 'none');
             d3.select(root.querySelector('#legendContainer')).style('display', 'none');
@@ -380,11 +417,19 @@ class SANKEY extends HTMLElement {
             .nodeWidth(36)
             .nodePadding(290)
             .size([width, height]);
+
+        // loop through each link replacing the text with its index from node
+        links.forEach(function (d, i) {
+            //links[i].source = nodes.indexOf(links[i].source);
+            links[i].source = nodes.map(e => e.name).indexOf(links[i].source);
+            //links[i].target = nodes.indexOf(links[i].target);
+            links[i].target = nodes.map(e => e.name).indexOf(links[i].target);
+        });
         
         sankey
             .nodes(nodes)
             .links(links)
-            .layout(1);
+            .layout(32);
             
         var link = vis.append("g")
         .selectAll(".link")

@@ -40,7 +40,7 @@ var getScriptPromisify = (src) => {
         "https://cdn.staticfile.org/echarts/5.0.0/echarts.min.js"
         
       );
-
+      this._myDataSource = dataBinding;
       if (!this._myDataSource || this._myDataSource.state !== "success") {
         return;
       }

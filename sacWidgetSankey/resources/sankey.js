@@ -1,50 +1,69 @@
 //d3-sankey SAC custom widget Version 1.0.0. 
 (function () {
-    let developMode = true; //AM developer flag
-    const prepared = document.createElement("template");
-    prepared.innerHTML = `
-        <style>
-        .linkDefault {
-        fill: none;
-        stroke: #000;
-        stroke-opacity: .2;
-        }
-        .linkUnselected {
-        stroke-opacity: .5;
-        }
-        .linkDefaultHover {
-        fill: none;
-        stroke: #000;
-        stroke-opacity: .2;
-        }
-        .linkUnselectedHover {
-        stroke-opacity: .5;
-        }
-        </style>
-        <div>
-	    <div id="root" style="width: 100%; height: 100%;">
-        </div>
-    `;
+let developMode = false; //AM developer flag
+const prepared = document.createElement("template");
+prepared.innerHTML = `
+    <style>
+    .linkDefault {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+    }
+    .linkUnselected {
+    stroke-opacity: .5;
+    }
+    .linkDefaultHover {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+    }
+    .linkUnselectedHover {
+    stroke-opacity: .5;
+    }
+    </style>
+    <div>
+    <div id="root" style="width: 100%; height: 100%;">
+    </div>
+`;
 
 class SANKEY extends HTMLElement {
     constructor() {
         super();
-
-        //let shadowRoot = this.attachShadow({mode: "open" });
-        //shadowRoot.appendChild(prepared.content.cloneNode(true));
-        this._shadowRoot = this.attachShadow({ mode: "open" });
-        this._shadowRoot.appendChild(prepared.content.cloneNode(true));
-
-        this._root = this._shadowRoot.getElementById("root");
-
+        let shadowRoot = this.attachShadow({
+                mode: "open"
+            });
+        shadowRoot.appendChild(prepared.content.cloneNode(true));
         this._props = this.d3SankeyDefaultSettings();
-        //this._init = true;
-        //this._firstUpdate = true;
-        //this._firstResize = true;
-        //this._selectionEvent = false;
-
-        this.render();
+        this._init = true;
+        this._firstUpdate = true;
+        this._firstResize = true;
+        this._selectionEvent = false;
     }
+
+    async render(){ 
+        var shadow = this.shadowRoot;
+        let LoadLibs = async function (host, data, props) {
+            try {
+                //await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
+                await host.loadScript("https://d3js.org/d3.v5.js", shadow);
+                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
+            } catch (e) {
+                console.log(JSON.stringify(e));
+            }
+            finally {
+                host.drawChart(data, props);
+            }
+        };
+        if (!(this._init || this._selectionEvent)) {
+            if (this._firstUpdate) {
+                LoadLibs(this, this.$data, this._props);
+                this._firstUpdate = false;
+            } else {
+                this.drawChart(this.$data, this._props);
+            }
+        }
+    }
+
     onCustomWidgetBeforeUpdate(changedProperties) {}
     onCustomWidgetAfterUpdate(changedProperties) {
         if ("startColor" in changedProperties) {
@@ -119,210 +138,233 @@ class SANKEY extends HTMLElement {
             this.$data = changedProperties["data"];
             this._selectionEvent = false;
         }
-
+        this.render();
+    }
+    onCustomWidgetResize(width, height) {
         this.render();
     }
 
-    onCustomWidgetResize(width, height) {
+    //This method is the developer method equal to set myDataSource
+    connectedCallback() { 
+        this.$width = "800px";
+        this.$height = "800px";
+        //this.$data = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]};
+        //this.$data = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"}],"links":[{"source":0,"target":1,"value":2}]};
+        var input = {"data":[{"dimensions_0":{"id":"Alcohol","label":"Alcohol"},"dimensions_1":{"id":"California","label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
+        //var input = {"data":[{"dimensions_0":{"id":1,"label":"Alcohol"},"dimensions_1":{"id":2,"label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}},{"dimensions_0":{"id":3,"label":"Alcohol_am"},"dimensions_1":{"id":2,"label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
+     
+        const source = input.metadata.feeds.dimensions.values[0];
+        const target = input.metadata.feeds.dimensions.values[1];
+        const measure = input.metadata.feeds.measures.values[0];
+
+        this.$data = { nodes:[], links:[]};
+        var nodes_source = input.data.map((data) => {
+            return {
+                    node: data[source].id,
+                    name: data[source].id
+                };
+          });
+        var nodes_target = input.data.map((data) => {
+            return {
+                    node: data[target].id,
+                    name: data[target].id
+                };
+          });
+        this.$data.nodes = nodes_source.concat(nodes_target);
+        this.$data.links = input.data.map((data) => {
+            return {
+                    source: data[source].id,
+                    target: data[target].id,
+                    value: data[measure].raw,
+            };
+          });
+          
+        this._init = false;
         this.render();
-    }  
+    }
 
     set myDataSource(dataBinding) {
+        var shadow = this.shadowRoot;
+        var custelem = shadow.host;
+        this.$width = custelem.parentNode.parentNode.parentNode.style.width;
+        this.$height = custelem.parentNode.parentNode.parentNode.style.height;
+        
         this._myDataSource = dataBinding;
-        this.render();
-      }
-
-    async render(){
         if (!this._myDataSource || this._myDataSource.state !== "success") {
             return;
-          }
-    console.log(this._myDataSource);
+        }
+    
+        const dimension = this._myDataSource.metadata.feeds.dimensions.values[0];
         const source = this._myDataSource.metadata.feeds.dimensions.values[0];
         const target = this._myDataSource.metadata.feeds.dimensions.values[1];
         const measure = this._myDataSource.metadata.feeds.measures.values[0];
 
-        const data = this._myDataSource.data.map((data) => {
+        this.$data = { nodes:[], links:[]};
+        var nodes_source = this._myDataSource.data.map((data) => {
             return {
-                nodes:{
-                    source: data[source].label
-                },
-                links:{
-                    source: data[source].label,
-                    target: data[target].label,
+                    node: data[source].id,
+                    name: data[source].id
+                };
+            });
+        var nodes_target = this._myDataSource.data.map((data) => {
+            return {
+                    node: data[target].id,
+                    name: data[target].id
+                };
+            });
+        this.$data.nodes = nodes_source.concat(nodes_target);
+        this.$data.links = this._myDataSource.data.map((data) => {
+            return {
+                    source: data[source].id,
+                    target: data[target].id,
                     value: data[measure].raw,
-                }
             };
-          });
-    
-
-        var shadow = this.shadowRoot;
-        this.$width = width + 'px';
-        this.$height = height + 'px';
-        let LoadLibsAfterResize = async function (host, data, props) {
-            try {
-                await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-            } catch (e) {
-                console.log(JSON.stringify(e));
-            }
-            finally {
-                host.drawChart(data, props, data);
-            }
-        };
-        if (this._firstResize) {
-            LoadLibsAfterResize(this, this.$data, this._props);
-            this._firstResize = false;
-        } else {
-            this.drawChart(this.$data, this._props, data);
-        }
-    }
-	
-	connectedCallback() {
+            });
+        
+        this._init = false;
         this.render();
-	}
-	disconnectedCallback() {}
-	updateSelectedLinkLabel(label) {
-		if (label == '')
-			this._props.selectedLinkLabel = undefined;
-		else
-			this._props.selectedLinkLabel = label;
-	}
+    }
 
-	drawChart(value, config, data) {
-		config.valDecimal = config.valDecimal + "";
-
-		var r = this.shadowRoot;
-		var _div = r.querySelector('div');
-		_div.style.width = this.$width - 10;
-		_div.style.height = this.$height;
-		_div.innerHTML = '';
-		let table = _div.appendChild(document.createElement("table"));
-		table.setAttribute("class", "rootTable");
-		table.setAttribute("cellspacing", "0");
-		table.setAttribute("cellpadding", "0");
-		table.setAttribute("border", "0");
-		let tbody = table.appendChild(document.createElement("tbody"));
-		let tabrow = tbody.appendChild(document.createElement("tr"));
-		let chartRoot = tabrow.appendChild(document.createElement("td"));
-		let buttonRoot = tabrow.appendChild(document.createElement("td"));
-		let legendRoot = tabrow.appendChild(document.createElement("td"));
-		var container = chartRoot.appendChild(document.createElement("div"));
-		container.setAttribute("id", "chartContainer");
-		container.setAttribute("class", "chartContainer");
-		var button = buttonRoot.appendChild(document.createElement("button"));
-		button.setAttribute("id", "button");
-		button.setAttribute("class", "button");
-		button.innerHTML = '«';
-		var legend = legendRoot.appendChild(document.createElement("div"));
-		legendRoot.setAttribute("id", "legendContainer");
-		legendRoot.setAttribute("class", "legendContainerHidden");
-
-		var fbchart = this.drawSankey(value, config, data, this.shadowRoot, this);
-	}
-
-	loadScript(src, shadowRoot) {
-		return new Promise(function (resolve, reject) {
-			let script = document.createElement('script');
-			script.src = src;
-			script.onload = () => {
-				console.log("Load: " + src);
-				resolve(script);
-			};
-			script.onerror = () => reject(new Error(`Script load error for ${src}`));
-			shadowRoot.appendChild(script);
-		});
-	}
-	d3SankeyDefaultSettings() {
-		return {
-			leftMargin: 10,
-			topMargin: 10,
-			rightMargin: 10,
-			bottomMargin: 10,
-			legendMargin: 50,
-			title: 'Custom Sankey Widget',
-			showTitle: true,
-			showAvg: true,
-			showSearch: true,
-			startColor: "#ffcd00",
-			endColor: "#b01c02",
-			sizeDecimal: 2,
-			colorDecimal: 2,
-			valDecimal: 2,
-			xAxisLabel: "Value",
-			sizeLabel: "Size",
-			colorLabel: "Color",
+    disconnectedCallback() {}
+    updateSelectedLinkLabel(label) {
+        if (label == '')
+            this._props.selectedLinkLabel = undefined;
+        else
+            this._props.selectedLinkLabel = label;
+    }
+    drawChart(value, config) {
+        config.valDecimal = config.valDecimal + "";
+        var r = this.shadowRoot;
+        var _div = r.querySelector('div');
+        _div.style.width = this.$width - 10;
+        _div.style.height = this.$height;
+        _div.innerHTML = '';
+        let table = _div.appendChild(document.createElement("table"));
+        table.setAttribute("class", "rootTable");
+        table.setAttribute("cellspacing", "0");
+        table.setAttribute("cellpadding", "0");
+        table.setAttribute("border", "0");
+        let tbody = table.appendChild(document.createElement("tbody"));
+        let tabrow = tbody.appendChild(document.createElement("tr"));
+        let chartRoot = tabrow.appendChild(document.createElement("td"));
+        let buttonRoot = tabrow.appendChild(document.createElement("td"));
+        let legendRoot = tabrow.appendChild(document.createElement("td"));
+        var container = chartRoot.appendChild(document.createElement("div"));
+        container.setAttribute("id", "chartContainer");
+        container.setAttribute("class", "chartContainer");
+        var button = buttonRoot.appendChild(document.createElement("button"));
+        button.setAttribute("id", "button");
+        button.setAttribute("class", "button");
+        button.innerHTML = '«';
+        var legend = legendRoot.appendChild(document.createElement("div"));
+        legendRoot.setAttribute("id", "legendContainer");
+        legendRoot.setAttribute("class", "legendContainerHidden");
+        var fbchart = this.drawSankey(value, config, this.shadowRoot, this);
+    }
+    loadScript(src, shadowRoot) {
+        return new Promise(function (resolve, reject) {
+            let script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                console.log("Load: " + src);
+                resolve(script);
+            };
+            script.onerror = () => reject(new Error(`Script load error for ${src}`));
+            shadowRoot.appendChild(script);
+        });
+    }
+    d3SankeyDefaultSettings() {
+        return {
+            leftMargin: 10,
+            topMargin: 10,
+            rightMargin: 10,
+            bottomMargin: 10,
+            legendMargin: 50,
+            title: 'Custom Sankey Widget',
+            showTitle: true,
+            showAvg: true,
+            showSearch: true,
+            startColor: "#ffcd00",
+            endColor: "#b01c02",
+            sizeDecimal: 2,
+            colorDecimal: 2,
+            valDecimal: 2,
+            xAxisLabel: "Value",
+            sizeLabel: "Size",
+            colorLabel: "Color",
             selectedLinkLabel: undefined,
             selectedLinkSource: undefined,
             selectedLinkTarget: undefined,
-			selectedColorValue: undefined,
-			data: [],
+            selectedColorValue: undefined,
+            data: [],
             defaultChartBodyHeight: 400,
             defaultChartBodyWidth: 400
         };
-	}
-	drawSankey(dataJSON, config, data, root, eventDispatcher) {
-		var container = d3.select(root.querySelector('#chartContainer'));
-		if (config == null)
-			config = d3SankeyDefaultSettings();
-		try {
-			config.data = JSON.parse(dataJSON);
-		} catch (e) {
-			container.append('div').attr('class', 'noData').append('p').text('No data to display.');
-			d3.select(root.querySelector('#button')).style('display', 'none');
-			d3.select(root.querySelector('#legendContainer')).style('display', 'none');
-			return this;
-		}
-		if (dataJSON == '' || dataJSON == '""' || dataJSON == "''" || dataJSON == '[]' || dataJSON == '{}' || dataJSON == null || dataJSON == undefined) {
-			container.append('div').attr('class', 'noData').append('p').text('No data to display.');
-			d3.select(root.querySelector('#button')).style('display', 'none');
-			d3.select(root.querySelector('#legendContainer')).style('display', 'none');
-			return this;
-		}
-		if(!developMode)
+    }
+    drawSankey(data, config, root, eventDispatcher) {
+        console.log(data);
+        var container = d3.select(root.querySelector('#chartContainer'));
+        if (config == null)
+            config = d3SankeyDefaultSettings();
+        try {
+            //config.data = JSON.parse(dataJSON);
+            config.data = data;
+        } catch (e) {
+            container.append('div').attr('class', 'noData').append('p').text('No data to display.');
+            d3.select(root.querySelector('#button')).style('display', 'none');
+            d3.select(root.querySelector('#legendContainer')).style('display', 'none');
+            return this;
+        }
+        if (data == '' || data == '""' || data == "''" || data == '[]' || data == '{}' || data == null || data == undefined) {
+            container.append('div').attr('class', 'noData').append('p').text('No data to display.');
+            d3.select(root.querySelector('#button')).style('display', 'none');
+            d3.select(root.querySelector('#legendContainer')).style('display', 'none');
+            return this;
+        }
+        if(!developMode)
         config.data = _.filter(config.data, function (d) {
                 return d.from != null && d.to != null && d.value != null && d.id != undefined && d.from != undefined && d.to != undefined;
             });
-		if (config.data.length == 0) {
-			container.append('div').attr('class', 'noData').append('p').text('No data to display.');
-			d3.select(root.querySelector('#button')).style('display', 'none');
-			d3.select(root.querySelector('#legendContainer')).style('display', 'none');
-			return this;
-		}
-		d3.select(root.querySelector('#button')).on('click', function (d) {
-			var arrow = root.querySelector('#button').innerHTML;
-			if (arrow == '«') {
-				root.querySelector('#button').innerHTML = '»';
-				d3.select(root.querySelector('#legendContainer')).attr('class', 'legendContainer');
-			} else {
-				root.querySelector('#button').innerHTML = '«';
-				d3.select(root.querySelector('#legendContainer')).attr('class', 'legendContainerHidden');
-			}
-		});
+        if (config.data.length == 0) {
+            container.append('div').attr('class', 'noData').append('p').text('No data to display.');
+            d3.select(root.querySelector('#button')).style('display', 'none');
+            d3.select(root.querySelector('#legendContainer')).style('display', 'none');
+            return this;
+        }
+        d3.select(root.querySelector('#button')).on('click', function (d) {
+            var arrow = root.querySelector('#button').innerHTML;
+            if (arrow == '«') {
+                root.querySelector('#button').innerHTML = '»';
+                d3.select(root.querySelector('#legendContainer')).attr('class', 'legendContainer');
+            } else {
+                root.querySelector('#button').innerHTML = '«';
+                d3.select(root.querySelector('#legendContainer')).attr('class', 'legendContainerHidden');
+            }
+        });
 		
-		var topBar = undefined;
-		if (config.showTitle || config.showSearch) {
-			topBar = container.append('div').attr('class', 'topBar').append('table').append('tr');
-			topBar.append('td').append('div').attr('id', 'titleContainer');
-			topBar.append('td').append('div').attr('id', 'searchContainer');
-		}
-		if (config.showSearch) {
-			var searchcontainer = root.querySelector('#searchContainer');
-			d3.select(searchcontainer).append('input').attr('id', 'searchfield').attr('type', 'search').attr("class", 'searchBar').attr("placeholder", "Search").on("keyup", function () {
-				var f = root.querySelector('#searchfield');
-				var q = f.value;
-				highlightLinks(q.toUpperCase());
-			}).on("search", function () {
-				var f = root.querySelector('#searchfield');
-				var q = f.value;
-				highlightLinks(q.toUpperCase());
-			});
-		}
-		if (config.showTitle) {
-			var vis_t = root.querySelector('#titleContainer');
-			d3.select(vis_t).append('text').text(config.title).attr('x', 0).attr('y', 0).attr("dy", "12px").attr("class", 'title');
+        var topBar = undefined;
+        if (config.showTitle || config.showSearch) {
+            topBar = container.append('div').attr('class', 'topBar').append('table').append('tr');
+            topBar.append('td').append('div').attr('id', 'titleContainer');
+            topBar.append('td').append('div').attr('id', 'searchContainer');
+        }
+        if (config.showSearch) {
+            var searchcontainer = root.querySelector('#searchContainer');
+            d3.select(searchcontainer).append('input').attr('id', 'searchfield').attr('type', 'search').attr("class", 'searchBar').attr("placeholder", "Search").on("keyup", function () {
+                var f = root.querySelector('#searchfield');
+                var q = f.value;
+                highlightLinks(q.toUpperCase());
+            }).on("search", function () {
+                var f = root.querySelector('#searchfield');
+                var q = f.value;
+                highlightLinks(q.toUpperCase());
+            });
+        }
+        if (config.showTitle) {
+            var vis_t = root.querySelector('#titleContainer');
+            d3.select(vis_t).append('text').text(config.title).attr('x', 0).attr('y', 0).attr("dy", "12px").attr("class", 'title');
         }
 
-        //Container Format and Style
         var vis = container.append('div')
                             .attr('class', 'chartBody')
                             .style('height', (config.showTitle || config.showSearch) ? Math.max((container.style('height')
@@ -331,62 +373,65 @@ class SANKEY extends HTMLElement {
                                         .replace("px", "") - 30), config.defaultChartBodyWidth) + 'px' : container.style('width'))
                             .append("svg:svg").attr("id", 'svgContent').attr("width", "100%").attr("height", "100%");
         var width = vis.style("width").replace("px", "");
-		var height = vis.style("height").replace("px", "");
-		var w = width - config.leftMargin - config.rightMargin - 50,
-		h = height - config.topMargin - config.bottomMargin;
-		var formatSizeValue = d3.format(",." + config.sizeDecimal + "f"),
-		formatColorValue = d3.format(",." + config.colorDecimal + "f"),
-		formatValue = d3.format(",." + config.valDecimal + "f");
-		var colorScale = [];
-		colorScale.push(config.startColor);
-		colorScale.push(config.endColor);
-        // END - Container Format and Style
+        var height = vis.style("height").replace("px", "");
+        var w = width - config.leftMargin - config.rightMargin - 50,
+        h = height - config.topMargin - config.bottomMargin;
+        var formatSizeValue = d3.format(",." + config.sizeDecimal + "f"),
+        formatColorValue = d3.format(",." + config.colorDecimal + "f"),
+        formatValue = d3.format(",." + config.valDecimal + "f");
+        var colorScale = [];
+        colorScale.push(config.startColor);
+        colorScale.push(config.endColor);
 
-		//var nodes = config.data.nodes;
-        //var links = config.data.links;
-		var nodes = data.nodes;
-		var links = data.links;
-
-
+        var nodes = config.data.nodes;
+        var links = config.data.links;
 
         if(!developMode){
-			var min_x = _.minBy(nodes, function (d) {
-					return d.xvalue;
-				}).xvalue;
-			var max_x = _.maxBy(nodes, function (d) {
-					return d.xvalue;
-				}).xvalue;
-			var mean_x = _.meanBy(nodes, function (d) {
-					return d.xvalue;
-				});
-			var min_c = _.minBy(nodes, function (d) {
-					return d.color;
-				}).color;
-			var max_c = _.maxBy(nodes, function (d) {
-					return d.color;
-				}).color;
-			var min_s = _.minBy(nodes, function (d) {
-					return d.size;
-				}).size;
-			var max_s = _.maxBy(nodes, function (d) {
-					return d.size;
-				}).size;
-				
+            var min_x = _.minBy(nodes, function (d) {
+                    return d.xvalue;
+                }).xvalue;
+            var max_x = _.maxBy(nodes, function (d) {
+                    return d.xvalue;
+                }).xvalue;
+            var mean_x = _.meanBy(nodes, function (d) {
+                    return d.xvalue;
+                });
+            var min_c = _.minBy(nodes, function (d) {
+                    return d.color;
+                }).color;
+            var max_c = _.maxBy(nodes, function (d) {
+                    return d.color;
+                }).color;
+            var min_s = _.minBy(nodes, function (d) {
+                    return d.size;
+                }).size;
+            var max_s = _.maxBy(nodes, function (d) {
+                    return d.size;
+                }).size;
+        
             var xScale = d3.scaleLinear().domain([min_x, max_x]).range([25, w - 25]);
             var cScale = d3.scaleLinear().domain([min_c, max_c]).range(colorScale);
             var zScale = d3.scaleLinear().domain([min_s, max_s]).range([5, 25]);
         }
-	
-		// Set the sankey diagram properties
+
+        // Set the sankey diagram properties
         var sankey = d3.sankey()
             .nodeWidth(36)
             .nodePadding(290)
             .size([width, height]);
+
+        // loop through each link replacing the text with its index from node
+        links.forEach(function (d, i) {
+            //links[i].source = nodes.indexOf(links[i].source);
+            links[i].source = nodes.map(e => e.name).indexOf(links[i].source);
+            //links[i].target = nodes.indexOf(links[i].target);
+            links[i].target = nodes.map(e => e.name).indexOf(links[i].target);
+        });
         
         sankey
             .nodes(nodes)
             .links(links)
-            .layout(1);
+            .layout(32);
             
         var link = vis.append("g")
         .selectAll(".link")
