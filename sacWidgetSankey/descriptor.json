@@ -33,11 +33,56 @@
 			"type": "string[]",
 			"default": []
 		},
-    "caption": {
-  		"type": "string",
-  		"description": "",
-  		"default": ""
-  	}
+        "caption": {
+            "type": "string",
+            "description": "",
+            "default": ""
+        },
+      "title": {
+          "type": "string",
+          "description": "Chart title",
+          "default": "Custom Sankey Widget"
+      },
+      "showTitle": {
+          "type": "boolean",
+          "description": "Show title of the chart",
+          "default": true
+      },
+      "sizeLabel": {
+          "type": "string",
+          "description": "Name of measure for bubble size",
+          "default": "Size"
+      },
+      "colorLabel": {
+          "type": "string",
+          "description": "Name of measure for bubble color",
+          "default": "Color"
+      },
+      "selectedLinkLabel": {
+          "type": "string",
+          "description": "Label of selected Link",
+          "default": "undefined"
+      },
+      "selectedLinkSource": {
+          "type": "string",
+          "description": "Source of selected Link",
+          "default": "undefined"
+      },
+      "selectedLinkTarget": {
+          "type": "string",
+          "description": "Target of selected Link",
+          "default": "undefined"
+      },
+      "startColor": {
+          "type": "string",
+          "description": "Color of the bubble with lowest color value",
+          "default": "#ffcd00"
+      },
+      "endColor": {
+          "type": "string",
+          "description": "Color of the bubble with highest color value",
+          "default": "#b01c02"
+      }
     },    
     "dataBindings": {
         "myDataSource": {
@@ -140,6 +185,61 @@
             }
           ],
           "body": "this.dataBindings.getDataBinding('myDataSource').setModel(modelId);"
+        },
+        "setStartColor": {
+            "description": "Sets the color of the bubble with lowest value.",
+            "parameters": [{
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Color of the bubble with lowest value"
+                }
+            ],
+            "body": "this.startColor = newColor;"
+        },
+        "setEndColor": {
+            "description": "Sets the color of the bubble with highest value.",
+            "parameters": [{
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Color of the bubble with highest value"
+                }
+            ],
+            "body": "this.endColor = newColor;"
+        },
+        "setTitleVisible": {
+            "description": "Show title of the chart.",
+            "parameters": [{
+                    "name": "flag",
+                    "type": "boolean",
+                    "description": "Show title of the chart"
+                }
+            ],
+            "body": "this.showTitle = flag;"
+        },
+        "setTitle": {
+            "description": "Sets the title of the chart.",
+            "parameters": [{
+                    "name": "newValue",
+                    "type": "string",
+                    "description": "The new title of chart"
+                }
+            ],
+            "body": "this.title = newValue;"
+        },
+        "getSelectedLinkLabel": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkLabel;"
+        },
+        "getSelectedLinkSource": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkSource;"
+        },
+        "getSelectedLinkTarget": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkTarget;"
         }
     
       },
