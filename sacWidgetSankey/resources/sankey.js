@@ -32,7 +32,7 @@ prepared.innerHTML = `
     </div>
 `;
 
-class SANKEY extends HTMLElement {
+class SANKEY extends HTMLElementa {
     constructor() {
         super();
 
@@ -69,7 +69,7 @@ class SANKEY extends HTMLElement {
         const target = this._myDataSource.metadata.feeds.dimensions.values[1];
         const measure = this._myDataSource.metadata.feeds.measures.values[0];
 
-        this.$data = { nodes:[], links:[]};
+        const data = { nodes:[], links:[]};
         var nodes_source = this._myDataSource.data.map((data) => {
             return {
                     node: data[source].id,
@@ -82,8 +82,8 @@ class SANKEY extends HTMLElement {
                     name: data[target].id
                 };
             });
-        this.$data.nodes = nodes_source.concat(nodes_target);
-        this.$data.links = this._myDataSource.data.map((data) => {
+        data.nodes = nodes_source.concat(nodes_target);
+        data.links = this._myDataSource.data.map((data) => {
             return {
                     source: data[source].id,
                     target: data[target].id,
