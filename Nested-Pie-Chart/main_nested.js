@@ -44,7 +44,7 @@ var getScriptPromisify = (src) => {
       if (!this._myDataSource || this._myDataSource.state !== "success") {
         return;
       }
-
+console.log(this._myDataSource);
       const dimension = this._myDataSource.metadata.feeds.dimensions.values[0];
       const measure = this._myDataSource.metadata.feeds.measures.values[0];
       const data = this._myDataSource.data.map((data) => {
