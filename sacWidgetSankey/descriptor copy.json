@@ -1,0 +1,162 @@
+{
+    "id": "ai.estilos.amontagna.demo.sankey",
+    "version": "2.0.6",
+    "name": "Sankey",
+    "description": "Sankey Chart",
+    "newInstancePrefix": "SANKEY",
+    "icon": "",
+    "vendor": "Estilos",
+    "eula": "",
+    "license": "",
+    "webcomponents": [{
+            "kind": "main",
+            "tag": "ai-estilos-amontagna-demo-sankey",
+            "url": "https://amontagnaEstilos.github.io/sacWidgetSankey/resources/sankey_copy.js",
+            "integrity": "",
+            "ignoreIntegrity": true
+        }
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Chart title",
+            "default": "Custom Sankey Widget"
+        },
+        "showTitle": {
+            "type": "boolean",
+            "description": "Show title of the chart",
+            "default": true
+        },
+        "sizeLabel": {
+            "type": "string",
+            "description": "Name of measure for bubble size",
+            "default": "Size"
+        },
+        "colorLabel": {
+            "type": "string",
+            "description": "Name of measure for bubble color",
+            "default": "Color"
+        },
+        "selectedLinkLabel": {
+            "type": "string",
+            "description": "Label of selected Link",
+            "default": "undefined"
+        },
+        "selectedLinkSource": {
+            "type": "string",
+            "description": "Source of selected Link",
+            "default": "undefined"
+        },
+        "selectedLinkTarget": {
+            "type": "string",
+            "description": "Target of selected Link",
+            "default": "undefined"
+        },
+        "startColor": {
+            "type": "string",
+            "description": "Color of the bubble with lowest color value",
+            "default": "#ffcd00"
+        },
+        "endColor": {
+            "type": "string",
+            "description": "Color of the bubble with highest color value",
+            "default": "#b01c02"
+        },
+        "width": {
+            "type": "integer",
+            "default": 800
+        },
+        "height": {
+            "type": "integer",
+            "default": 800
+        }
+    },    
+    "dataBindings": {
+        "myDataSource": {
+          "feeds": [
+            {
+              "id": "dimensions",
+              "description": "Dimensions",
+              "type": "dimension"
+            },
+            {
+              "id": "measures",
+              "description": "Measures",
+              "type": "mainStructureMember"
+            }
+          ]
+        }
+      },
+    "methods": {
+        "setStartColor": {
+            "description": "Sets the color of the bubble with lowest value.",
+            "parameters": [{
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Color of the bubble with lowest value"
+                }
+            ],
+            "body": "this.startColor = newColor;"
+        },
+        "setEndColor": {
+            "description": "Sets the color of the bubble with highest value.",
+            "parameters": [{
+                    "name": "newColor",
+                    "type": "string",
+                    "description": "Color of the bubble with highest value"
+                }
+            ],
+            "body": "this.endColor = newColor;"
+        },
+        "setTitleVisible": {
+            "description": "Show title of the chart.",
+            "parameters": [{
+                    "name": "flag",
+                    "type": "boolean",
+                    "description": "Show title of the chart"
+                }
+            ],
+            "body": "this.showTitle = flag;"
+        },
+        "setTitle": {
+            "description": "Sets the title of the chart.",
+            "parameters": [{
+                    "name": "newValue",
+                    "type": "string",
+                    "description": "The new title of chart"
+                }
+            ],
+            "body": "this.title = newValue;"
+        },
+        "setData": {
+            "description": "Sets the data of the chart.",
+            "parameters": [{
+                    "name": "newJSONData",
+                    "type": "string",
+                    "description": "The new data of chart"
+                }
+            ],
+            "body": ""
+        },
+        "getSelectedLinkLabel": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkLabel;"
+        },
+        "getSelectedLinkSource": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkSource;"
+        },
+        "getSelectedLinkTarget": {
+            "returnType": "string",
+            "description": "Returns the label of selected Link.",
+            "body": "return this.selectedLinkTarget;"
+        }
+    },
+    "events": {
+        "onSelect": {
+            "description": "Called when the user selects/de-selects a bubble."
+        }
+    }
+}

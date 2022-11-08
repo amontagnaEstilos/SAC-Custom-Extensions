@@ -1,3 +1,9 @@
+var getScriptPromisify = (src) => {
+    return new Promise((resolve) => {
+      $.getScript(src, resolve);
+    });
+  };
+
 //d3-sankey SAC custom widget Version 1.0.0. 
 (function () {
 let developMode = false; //AM developer flag
@@ -29,165 +35,29 @@ prepared.innerHTML = `
 class SANKEY extends HTMLElement {
     constructor() {
         super();
-        let shadowRoot = this.attachShadow({
-                mode: "open"
-            });
-        shadowRoot.appendChild(prepared.content.cloneNode(true));
-        this._props = this.d3SankeyDefaultSettings();
-        this._init = true;
-        this._firstUpdate = true;
-        this._firstResize = true;
-        this._selectionEvent = false;
-    }
 
-    async render(){ 
-        var shadow = this.shadowRoot;
-        let LoadLibs = async function (host, data, props) {
-            try {
-                //await host.loadScript("https://d3js.org/d3.v4.min.js", shadow);
-                await host.loadScript("https://d3js.org/d3.v5.js", shadow);
-                await host.loadScript("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js", shadow);
-            } catch (e) {
-                console.log(JSON.stringify(e));
-            }
-            finally {
-                host.drawChart(data, props);
-            }
-        };
-        if (!(this._init || this._selectionEvent)) {
-            if (this._firstUpdate) {
-                LoadLibs(this, this.$data, this._props);
-                this._firstUpdate = false;
-            } else {
-                this.drawChart(this.$data, this._props);
-            }
-        }
-    }
-
-    onCustomWidgetBeforeUpdate(changedProperties) {}
-    onCustomWidgetAfterUpdate(changedProperties) {
-        if ("startColor" in changedProperties) {
-            this._props.startColor = changedProperties["startColor"];
-            this._selectionEvent = false;
-        }
-        if ("endColor" in changedProperties) {
-            this._props.endColor = changedProperties["endColor"];
-            this._selectionEvent = false;
-        }
-        if ("title" in changedProperties) {
-            this._props.title = changedProperties["title"];
-            this._selectionEvent = false;
-        }
-        if ("showTitle" in changedProperties) {
-            this._props.showTitle = changedProperties["showTitle"];
-            this._selectionEvent = false;
-        }
-        if ("showAvg" in changedProperties) {
-            this._props.showAvg = changedProperties["showAvg"];
-            this._selectionEvent = false;
-        }
-        if ("valDecimal" in changedProperties) {
-            this._props.valDecimal = changedProperties["valDecimal"];
-            this._selectionEvent = false;
-        }
-        if ("sizeDecimal" in changedProperties) {
-            this._props.sizeDecimal = changedProperties["sizeDecimal"];
-            this._selectionEvent = false;
-        }
-        if ("colorDecimal" in changedProperties) {
-            this._props.colorDecimal = changedProperties["colorDecimal"];
-            this._selectionEvent = false;
-        }
-        if ("xAxisLabel" in changedProperties) {
-            this._props.xAxisLabel = changedProperties["xAxisLabel"];
-            this._selectionEvent = false;
-        }
-        if ("sizeLabel" in changedProperties) {
-            this._props.sizeLabel = changedProperties["sizeLabel"];
-            this._selectionEvent = false;
-        }
-        if ("colorLabel" in changedProperties) {
-            this._props.colorLabel = changedProperties["colorLabel"];
-            this._selectionEvent = false;
-        }
-        if ("selectedLinkLabel" in changedProperties) {
-            if (changedProperties["selectedLinkLabel"] == '') {
-                this._props.selectedLinkLabel = undefined;
-            } else {
-                this._props.selectedLinkLabel = changedProperties["selectedLinkLabel"];
-            }
-            this._selectionEvent = true;
-        }
-        if ("selectedLinkSource" in changedProperties) {
-            if (changedProperties["selectedLinkSource"] == '') {
-                this._props.selectedLinkSource = undefined;
-            } else {
-                this._props.selectedLinkSource = changedProperties["selectedLinkSource"];
-            }
-            this._selectionEvent = true;
-        }
-        if ("selectedLinkTarget" in changedProperties) {
-            if (changedProperties["selectedLinkTarget"] == '') {
-                this._props.selectedLinkTarget = undefined;
-            } else {
-                this._props.selectedLinkTarget = changedProperties["selectedLinkTarget"];
-            }
-            this._selectionEvent = true;
-        }
-        if ("data" in changedProperties) {
-            this.$data = changedProperties["data"];
-            this._selectionEvent = false;
-        }
+        this._shadowRoot = this.attachShadow({ mode: "open" });
+        this._shadowRoot.appendChild(prepared.content.cloneNode(true));
+  
+        this._root = this._shadowRoot.getElementById("root");
+  
+        this._props = {};
+  
         this.render();
     }
+
     onCustomWidgetResize(width, height) {
         this.render();
     }
 
-    //This method is the developer method equal to set myDataSource
-    connectedCallback() { 
-        this.$width = "800px";
-        this.$height = "800px";
-        //this.$data = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"},{"node":2,"name":"node2"},{"node":3,"name":"node3"},{"node":4,"name":"node4"}],"links":[{"source":0,"target":2,"value":2},{"source":1,"target":2,"value":2},{"source":1,"target":3,"value":2},{"source":0,"target":4,"value":2},{"source":2,"target":3,"value":2},{"source":2,"target":4,"value":2},{"source":3,"target":4,"value":4}]};
-        //this.$data = {"nodes":[{"node":0,"name":"node0"},{"node":1,"name":"node1"}],"links":[{"source":0,"target":1,"value":2}]};
-        var input = {"data":[{"dimensions_0":{"id":"Alcohol","label":"Alcohol"},"dimensions_1":{"id":"California","label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
-        //var input = {"data":[{"dimensions_0":{"id":1,"label":"Alcohol"},"dimensions_1":{"id":2,"label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}},{"dimensions_0":{"id":3,"label":"Alcohol_am"},"dimensions_1":{"id":2,"label":"California"},"measures_0":{"raw":30720120.73,"formatted":"30.72Million","unit":"USD"}}],"metadata":{"feeds":{"measures":{"values":["measures_0"],"type":"mainStructureMember"},"dimensions":{"values":["dimensions_0","dimensions_1"],"type":"dimension"}},"dimensions":{"dimensions_0":{"id":"Product_3e315003an","description":"Product"},"dimensions_1":{"id":"Location_4nm2e04531","description":"Location"}},"mainStructureMembers":{"measures_0":{"id":"[Account_BestRunJ_sold].[parentId].&[Discount]","label":"Discount"}}}};
-     
-        const source = input.metadata.feeds.dimensions.values[0];
-        const target = input.metadata.feeds.dimensions.values[1];
-        const measure = input.metadata.feeds.measures.values[0];
-
-        this.$data = { nodes:[], links:[]};
-        var nodes_source = input.data.map((data) => {
-            return {
-                    node: data[source].id,
-                    name: data[source].id
-                };
-          });
-        var nodes_target = input.data.map((data) => {
-            return {
-                    node: data[target].id,
-                    name: data[target].id
-                };
-          });
-        this.$data.nodes = nodes_source.concat(nodes_target);
-        this.$data.links = input.data.map((data) => {
-            return {
-                    source: data[source].id,
-                    target: data[target].id,
-                    value: data[measure].raw,
-            };
-          });
-          
-        this._init = false;
+    set myDataSource(dataBinding) {
+        this._myDataSource = dataBinding;
         this.render();
     }
 
-    set myDataSource(dataBinding) {
-        var shadow = this.shadowRoot;
-        var custelem = shadow.host;
-        this.$width = custelem.parentNode.parentNode.parentNode.style.width;
-        this.$height = custelem.parentNode.parentNode.parentNode.style.height;
+    async render(){ 
+        await getScriptPromisify("https://d3js.org/d3.v5.js");
+        await getScriptPromisify("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js");
         
         this._myDataSource = dataBinding;
         if (!this._myDataSource || this._myDataSource.state !== "success") {
@@ -221,17 +91,10 @@ class SANKEY extends HTMLElement {
             };
             });
         
-        this._init = false;
-        this.render();
+        
+        this.drawChart(this.$data, this._props);
     }
 
-    disconnectedCallback() {}
-    updateSelectedLinkLabel(label) {
-        if (label == '')
-            this._props.selectedLinkLabel = undefined;
-        else
-            this._props.selectedLinkLabel = label;
-    }
     drawChart(value, config) {
         config.valDecimal = config.valDecimal + "";
         var r = this.shadowRoot;
@@ -261,18 +124,7 @@ class SANKEY extends HTMLElement {
         legendRoot.setAttribute("class", "legendContainerHidden");
         var fbchart = this.drawSankey(value, config, this.shadowRoot, this);
     }
-    loadScript(src, shadowRoot) {
-        return new Promise(function (resolve, reject) {
-            let script = document.createElement('script');
-            script.src = src;
-            script.onload = () => {
-                console.log("Load: " + src);
-                resolve(script);
-            };
-            script.onerror = () => reject(new Error(`Script load error for ${src}`));
-            shadowRoot.appendChild(script);
-        });
-    }
+
     d3SankeyDefaultSettings() {
         return {
             leftMargin: 10,
@@ -301,6 +153,7 @@ class SANKEY extends HTMLElement {
             defaultChartBodyWidth: 400
         };
     }
+
     drawSankey(data, config, root, eventDispatcher) {
         console.log(data);
         var container = d3.select(root.querySelector('#chartContainer'));
