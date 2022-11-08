@@ -59,7 +59,7 @@ class SANKEY extends HTMLElement {
         await getScriptPromisify("https://d3js.org/d3.v5.js");
         await getScriptPromisify("https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/sankey.js");
         
-        //this._myDataSource = dataBinding;
+        this._myDataSource = dataBinding;
         if (!this._myDataSource || this._myDataSource.state !== "success") {
             return;
         }
