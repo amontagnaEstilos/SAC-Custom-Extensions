@@ -28,7 +28,8 @@
 			this.dispatchEvent(new CustomEvent("propertiesChanged", {
 					detail: {
 						properties: {
-							color: this.color
+							//color: this.color
+							color: "black"
 						}
 					}
 			}));
