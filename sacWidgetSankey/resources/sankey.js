@@ -159,8 +159,8 @@ class SANKEY extends HTMLElement {
             selectedLinkTarget: undefined,
             selectedColorValue: undefined,
             data: [],
-            defaultChartBodyHeight: 400,
-            defaultChartBodyWidth: 400
+            defaultChartBodyHeight: 1200,
+            defaultChartBodyWidth: 1600
         };
     }
 

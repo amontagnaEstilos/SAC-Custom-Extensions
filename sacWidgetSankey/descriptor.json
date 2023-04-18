@@ -1,6 +1,6 @@
 {
     "id": "ai.estilos.amontagna.demo.sankey",
-    "version": "2.0.11",
+    "version": "2.0.12",
     "name": "Sankey",
     "description": "Sankey Chart",
     "newInstancePrefix": "SANKEY",
@@ -19,11 +19,11 @@
     "properties": {
 		"width": {
 			"type": "integer",
-			"default": 600
+			"default": 1600
 		},
 		"height": {
 			"type": "integer",
-			"default": 420
+			"default": 1200
 		},
     "dimensionFeed": {
 			"type": "string[]",
