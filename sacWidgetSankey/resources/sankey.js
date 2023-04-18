@@ -322,7 +322,7 @@ class SANKEY extends HTMLElement {
                 }
             })
           .on("click", function (d, i) {
-            if (config.selectedLinkLabel == d.id) {
+            if (config.selectedLinkLabel == d.id & d.id != null) {
                 config.selectedLinkLabel = undefined;
                 config.selectedLinkSource = undefined;
                 config.selectedLinkTarget = undefined;
