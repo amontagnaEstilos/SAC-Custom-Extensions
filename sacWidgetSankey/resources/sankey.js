@@ -157,7 +157,7 @@ class SANKEY extends HTMLElement {
         console.log(data);
         var container = d3.select(root.querySelector('#chartContainer'));
         if (config.title == null)
-            config = d3SankeyDefaultSettings();
+            config = this.d3SankeyDefaultSettings();
         try {
             //config.data = JSON.parse(dataJSON);
             config.data = data;
