@@ -81,6 +81,17 @@ class SANKEY extends HTMLElement {
                     name: data[target].id
                 };
             });
+        nodes_source = nodes_source.filter(
+            (n, index) => index === nodes_source.findIndex(
+            other => n.node === other.node
+            && n.name === other.name
+        ));        
+        nodes_target = nodes_target.filter(
+            (n, index) => index === nodes_target.findIndex(
+            other => n.node === other.node
+            && n.name === other.name
+        ));
+        
         data.nodes = nodes_source.concat(nodes_target);
         data.links = this._myDataSource.data.map((data) => {
             return {
@@ -269,7 +280,7 @@ class SANKEY extends HTMLElement {
         // Set the sankey diagram properties
         var sankey = d3.sankey()
             .nodeWidth(36)
-            .nodePadding(290)
+            .nodePadding(1)
             .size([width, height]);
 
         // loop through each link replacing the text with its index from node
@@ -283,7 +294,7 @@ class SANKEY extends HTMLElement {
         sankey
             .nodes(nodes)
             .links(links)
-            .layout(32);
+            .layout(1);
             
         var link = vis.append("g")
         .selectAll(".link")

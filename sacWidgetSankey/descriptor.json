@@ -1,6 +1,6 @@
 {
     "id": "ai.estilos.amontagna.demo.sankey",
-    "version": "2.0.10",
+    "version": "2.0.11",
     "name": "Sankey",
     "description": "Sankey Chart",
     "newInstancePrefix": "SANKEY",
