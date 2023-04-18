@@ -5,7 +5,7 @@
 	"description": "A colored box",
 	"newInstancePrefix": "ColoredBox",
 	"icon": "https://amontagnaEstilos.github.io/coloredbox/main/icon.png",
-	"vendor": "SAP",
+	"vendor": "Estilos",
 	"eula": "",
 	"license": "",
 	"webcomponents": [
