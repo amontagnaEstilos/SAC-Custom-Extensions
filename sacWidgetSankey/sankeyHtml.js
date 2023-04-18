@@ -231,7 +231,7 @@ class SANKEY extends HTMLElement {
             this._props.selectedLinkLabel = label;
     }
     drawChart(value, config) {
-        config.valDecimal = config.valDecimal + "";
+        //config.valDecimal = config.valDecimal + "";
         var r = this.shadowRoot;
         var _div = r.querySelector('div');
         _div.style.width = this.$width - 10;
