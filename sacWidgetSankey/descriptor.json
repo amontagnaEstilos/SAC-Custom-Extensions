@@ -249,6 +249,9 @@
         },
         "onClick": {
           "description": "called when the result set of the widget changes"
+        },
+        "onSelect": {
+          "description": "called when the result set of the widget changes"
         }
     }}
     
