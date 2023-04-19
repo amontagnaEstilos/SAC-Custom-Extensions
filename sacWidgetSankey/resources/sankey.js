@@ -421,7 +421,7 @@ class SANKEY extends HTMLElement {
                 }));
             var event = new Event("onSelect");
             eventDispatcher.dispatchEvent(event);
-            if(developMode) console.log(getLinkId(d));
+            if(developMode) {console.log(config.selectedLinkLabel); console.log(config.selectedLinkSource);}
         })
           ;
 
