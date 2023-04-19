@@ -46,6 +46,85 @@ class SANKEY extends HTMLElement {
         this.render();
     }
 
+    onCustomWidgetBeforeUpdate(changedProperties) {}
+    onCustomWidgetAfterUpdate(changedProperties) {
+        if ("startColor" in changedProperties) {
+            this._props.startColor = changedProperties["startColor"];
+            this._selectionEvent = false;
+        }
+        if ("endColor" in changedProperties) {
+            this._props.endColor = changedProperties["endColor"];
+            this._selectionEvent = false;
+        }
+        if ("title" in changedProperties) {
+            this._props.title = changedProperties["title"];
+            this._selectionEvent = false;
+        }
+        if ("showTitle" in changedProperties) {
+            this._props.showTitle = changedProperties["showTitle"];
+            this._selectionEvent = false;
+        }
+        if ("showAvg" in changedProperties) {
+            this._props.showAvg = changedProperties["showAvg"];
+            this._selectionEvent = false;
+        }
+        if ("valDecimal" in changedProperties) {
+            this._props.valDecimal = changedProperties["valDecimal"];
+            this._selectionEvent = false;
+        }
+        if ("sizeDecimal" in changedProperties) {
+            this._props.sizeDecimal = changedProperties["sizeDecimal"];
+            this._selectionEvent = false;
+        }
+        if ("colorDecimal" in changedProperties) {
+            this._props.colorDecimal = changedProperties["colorDecimal"];
+            this._selectionEvent = false;
+        }
+        if ("xAxisLabel" in changedProperties) {
+            this._props.xAxisLabel = changedProperties["xAxisLabel"];
+            this._selectionEvent = false;
+        }
+        if ("sizeLabel" in changedProperties) {
+            this._props.sizeLabel = changedProperties["sizeLabel"];
+            this._selectionEvent = false;
+        }
+        if ("colorLabel" in changedProperties) {
+            this._props.colorLabel = changedProperties["colorLabel"];
+            this._selectionEvent = false;
+        }
+        if ("selectedLinkLabel" in changedProperties) {
+            if (changedProperties["selectedLinkLabel"] == '') {
+                this._props.selectedLinkLabel = undefined;
+            } else {
+                this._props.selectedLinkLabel = changedProperties["selectedLinkLabel"];
+            }
+            this._selectionEvent = true;
+            console.log(`${this._props["selectedLinkLabel"]}`);
+        }
+        if ("selectedLinkSource" in changedProperties) {
+            if (changedProperties["selectedLinkSource"] == '') {
+                this._props.selectedLinkSource = undefined;
+            } else {
+                this._props.selectedLinkSource = changedProperties["selectedLinkSource"];
+            }
+            this._selectionEvent = true;
+            console.log(`${this._props["selectedLinkSource"]}`);
+        }
+        if ("selectedLinkTarget" in changedProperties) {
+            if (changedProperties["selectedLinkTarget"] == '') {
+                this._props.selectedLinkTarget = undefined;
+            } else {
+                this._props.selectedLinkTarget = changedProperties["selectedLinkTarget"];
+            }
+            this._selectionEvent = true;
+            console.log(`${this._props["selectedLinkTarget"]}`);
+        }
+        if ("data" in changedProperties) {
+            this.$data = changedProperties["data"];
+            this._selectionEvent = false;
+        }
+        this.render();
+    }
     onCustomWidgetResize(width, height) {
         this.render();
     }

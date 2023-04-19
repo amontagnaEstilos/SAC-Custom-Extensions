@@ -123,6 +123,7 @@ class SANKEY extends HTMLElement {
                 this._props.selectedLinkSource = changedProperties["selectedLinkSource"];
             }
             this._selectionEvent = true;
+            console.log(`${this._props["selectedLinkSource"]}`);
         }
         if ("selectedLinkTarget" in changedProperties) {
             if (changedProperties["selectedLinkTarget"] == '') {
